@@ -12,8 +12,6 @@ namespace Dreamy.Feature.Settings.Integration
     public sealed class RateUsPanel : UIPanel, IRateUsView
     {
         [SerializeField] private Button[] starButtons;
-        [SerializeField] private TMP_Text[] starLabels;
-        [SerializeField] private UITweenScale[] starTweens;
         [SerializeField] private Button rateButton;
         [SerializeField] private Button closeButton;
         [SerializeField] private TMP_Text statusText;
@@ -61,14 +59,11 @@ namespace Dreamy.Feature.Settings.Integration
 
         public void SetRating(int rating)
         {
-            for (int index = 0; index < starLabels.Length; index++)
+            for (int index = 0; index < starButtons.Length; index++)
             {
-                bool isSelected = index < rating;
-                starLabels[index].text = isSelected ? "★" : "☆";
-                if (isSelected && index < starTweens.Length && starTweens[index] != null)
-                {
-                    PulseStarAsync(starTweens[index], index).Forget();
-                }
+                starButtons[index].image.color = index < rating
+                    ? new Color(1f, 0.78f, 0.18f, 1f)
+                    : new Color(0.25f, 0.22f, 0.35f, 1f);
             }
 
             statusText.text = rating == 0 ? "Tap a star" : $"{rating}/5";
@@ -93,10 +88,5 @@ namespace Dreamy.Feature.Settings.Integration
         private void RequestRate() => RateRequested?.Invoke();
         private void RequestClose() => CloseRequested?.Invoke();
 
-        private static async UniTaskVoid PulseStarAsync(UITweenScale starTween, int index)
-        {
-            await UniTask.Delay(40 * index);
-            await starTween.Show();
-        }
     }
 }

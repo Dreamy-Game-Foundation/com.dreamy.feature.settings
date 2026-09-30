@@ -1,10 +1,10 @@
 # Settings Feature
 
-Copy this folder into the game and create a `SettingsPanel` prefab variant from `BaseFeaturePanel`.
+Import this sample and move the entire folder into the game. `SettingsPanel.prefab` and `RateUsPanel.prefab` are variants of `BaseFeaturePanel`; keep `com.dreamy.feature` installed.
 
-Assign TMP status text, music/SFX sliders, GDPR, Restore Purchases, Open Store, and Close buttons to `SettingsPanel`. Add `SettingsController` to the same panel root.
+The prefabs contain the UI and launcher components. Register Audio and install Settings at bootstrap; the launcher waits for `ISettingsService` before showing the panel. Check their serialized TMP labels, music/SFX toggles, GDPR, Restore Purchases, Open Store, and Close buttons after import. The optional simulated gateway is for a standalone demo only and must be registered explicitly.
 
-Register the host platform gateway before installing Settings:
+For production, register the real host platform gateway before installing Settings and creating the panel:
 
 ```csharp
 ServiceLocator.Register<ISettingsPlatformGateway>(platformGateway);

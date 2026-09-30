@@ -9,8 +9,8 @@ namespace Dreamy.Feature.Settings.Integration
 {
     public sealed class SettingsPanel : UIPanel, ISettingsView
     {
-        [SerializeField] private Slider musicVolumeSlider;
-        [SerializeField] private Slider sfxVolumeSlider;
+        [SerializeField] private Toggle musicToggle;
+        [SerializeField] private Toggle sfxToggle;
         [SerializeField] private Button gdprButton;
         [SerializeField] private Button restorePurchasesButton;
         [SerializeField] private Button openStoreButton;
@@ -28,8 +28,8 @@ namespace Dreamy.Feature.Settings.Integration
 
         private void OnEnable()
         {
-            musicVolumeSlider.onValueChanged.AddListener(RequestMusicVolume);
-            sfxVolumeSlider.onValueChanged.AddListener(RequestSfxVolume);
+            musicToggle.onValueChanged.AddListener(RequestMusicEnabled);
+            sfxToggle.onValueChanged.AddListener(RequestSfxEnabled);
             gdprButton.onClick.AddListener(RequestGdpr);
             restorePurchasesButton.onClick.AddListener(RequestRestorePurchases);
             openStoreButton.onClick.AddListener(RequestOpenStore);
@@ -38,8 +38,8 @@ namespace Dreamy.Feature.Settings.Integration
 
         protected override void OnDisable()
         {
-            musicVolumeSlider.onValueChanged.RemoveListener(RequestMusicVolume);
-            sfxVolumeSlider.onValueChanged.RemoveListener(RequestSfxVolume);
+            musicToggle.onValueChanged.RemoveListener(RequestMusicEnabled);
+            sfxToggle.onValueChanged.RemoveListener(RequestSfxEnabled);
             gdprButton.onClick.RemoveListener(RequestGdpr);
             restorePurchasesButton.onClick.RemoveListener(RequestRestorePurchases);
             openStoreButton.onClick.RemoveListener(RequestOpenStore);
@@ -49,8 +49,8 @@ namespace Dreamy.Feature.Settings.Integration
 
         public void Render(SettingsViewState state)
         {
-            musicVolumeSlider.SetValueWithoutNotify(state.MusicVolume);
-            sfxVolumeSlider.SetValueWithoutNotify(state.SfxVolume);
+            musicToggle.SetIsOnWithoutNotify(state.MusicVolume > 0f);
+            sfxToggle.SetIsOnWithoutNotify(state.SfxVolume > 0f);
             gdprButton.gameObject.SetActive(state.CanShowGdprConsent);
             restorePurchasesButton.gameObject.SetActive(state.CanRestorePurchases);
             openStoreButton.gameObject.SetActive(state.CanOpenStore);
@@ -68,8 +68,8 @@ namespace Dreamy.Feature.Settings.Integration
 
         public void Close() => Hide();
 
-        private void RequestMusicVolume(float volume) => MusicVolumeChanged?.Invoke(volume);
-        private void RequestSfxVolume(float volume) => SfxVolumeChanged?.Invoke(volume);
+        private void RequestMusicEnabled(bool isEnabled) => MusicVolumeChanged?.Invoke(isEnabled ? 1f : 0f);
+        private void RequestSfxEnabled(bool isEnabled) => SfxVolumeChanged?.Invoke(isEnabled ? 1f : 0f);
         private void RequestGdpr() => GdprRequested?.Invoke();
         private void RequestRestorePurchases() => RestorePurchasesRequested?.Invoke();
         private void RequestOpenStore() => OpenStoreRequested?.Invoke();
