@@ -4,7 +4,7 @@ The included `SettingsPanel` and `RateUsPanel` prefabs are ready to use. Their l
 
 For a custom scene setup, assign music/SFX toggles, GDPR, Restore Purchases, Open Store, Open Rate Us, and Close buttons to `SettingsPanel`. Use `SettingsController` with a scene `RateUsPanel` reference, or use the included launchers for prefab-driven setup.
 
-Register the host platform gateway before installing Settings:
+For production, register the real host platform gateway before installing Settings and creating the panel:
 
 ```csharp
 ServiceLocator.Register<ISettingsPlatformGateway>(platformGateway);
