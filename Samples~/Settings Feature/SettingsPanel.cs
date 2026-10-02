@@ -1,7 +1,6 @@
 using System;
 using Dreamy.Settings;
 using Dreamy.UI;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,13 +8,13 @@ namespace Dreamy.Feature.Settings.Integration
 {
     public sealed class SettingsPanel : UIPanel, ISettingsView
     {
-        [SerializeField] private Slider musicVolumeSlider;
-        [SerializeField] private Slider sfxVolumeSlider;
+        [SerializeField] private Toggle musicToggle;
+        [SerializeField] private Toggle sfxToggle;
         [SerializeField] private Button gdprButton;
         [SerializeField] private Button restorePurchasesButton;
         [SerializeField] private Button openStoreButton;
+        [SerializeField] private Button openRateUsButton;
         [SerializeField] private Button closeButton;
-        [SerializeField] private TMP_Text statusText;
 
         public override bool CanBack => true;
 
@@ -24,33 +23,36 @@ namespace Dreamy.Feature.Settings.Integration
         public event Action GdprRequested;
         public event Action RestorePurchasesRequested;
         public event Action OpenStoreRequested;
+        public event Action OpenRateUsRequested;
         public event Action CloseRequested;
 
         private void OnEnable()
         {
-            musicVolumeSlider.onValueChanged.AddListener(RequestMusicVolume);
-            sfxVolumeSlider.onValueChanged.AddListener(RequestSfxVolume);
+            musicToggle.onValueChanged.AddListener(RequestMusicToggle);
+            sfxToggle.onValueChanged.AddListener(RequestSfxToggle);
             gdprButton.onClick.AddListener(RequestGdpr);
             restorePurchasesButton.onClick.AddListener(RequestRestorePurchases);
             openStoreButton.onClick.AddListener(RequestOpenStore);
+            openRateUsButton.onClick.AddListener(RequestOpenRateUs);
             closeButton.onClick.AddListener(RequestClose);
         }
 
         protected override void OnDisable()
         {
-            musicVolumeSlider.onValueChanged.RemoveListener(RequestMusicVolume);
-            sfxVolumeSlider.onValueChanged.RemoveListener(RequestSfxVolume);
+            musicToggle.onValueChanged.RemoveListener(RequestMusicToggle);
+            sfxToggle.onValueChanged.RemoveListener(RequestSfxToggle);
             gdprButton.onClick.RemoveListener(RequestGdpr);
             restorePurchasesButton.onClick.RemoveListener(RequestRestorePurchases);
             openStoreButton.onClick.RemoveListener(RequestOpenStore);
+            openRateUsButton.onClick.RemoveListener(RequestOpenRateUs);
             closeButton.onClick.RemoveListener(RequestClose);
             base.OnDisable();
         }
 
         public void Render(SettingsViewState state)
         {
-            musicVolumeSlider.SetValueWithoutNotify(state.MusicVolume);
-            sfxVolumeSlider.SetValueWithoutNotify(state.SfxVolume);
+            musicToggle.SetIsOnWithoutNotify(state.MusicVolume > 0f);
+            sfxToggle.SetIsOnWithoutNotify(state.SfxVolume > 0f);
             gdprButton.gameObject.SetActive(state.CanShowGdprConsent);
             restorePurchasesButton.gameObject.SetActive(state.CanRestorePurchases);
             openStoreButton.gameObject.SetActive(state.CanOpenStore);
@@ -63,16 +65,14 @@ namespace Dreamy.Feature.Settings.Integration
             openStoreButton.interactable = interactable;
         }
 
-        public void ShowOperationResult(SettingsOperationResult result) =>
-            statusText.text = string.IsNullOrWhiteSpace(result.Message) ? result.Status.ToString() : result.Message;
-
         public void Close() => Hide();
 
-        private void RequestMusicVolume(float volume) => MusicVolumeChanged?.Invoke(volume);
-        private void RequestSfxVolume(float volume) => SfxVolumeChanged?.Invoke(volume);
+        private void RequestMusicToggle(bool isOn) => MusicVolumeChanged?.Invoke(isOn ? 1f : 0f);
+        private void RequestSfxToggle(bool isOn) => SfxVolumeChanged?.Invoke(isOn ? 1f : 0f);
         private void RequestGdpr() => GdprRequested?.Invoke();
         private void RequestRestorePurchases() => RestorePurchasesRequested?.Invoke();
         private void RequestOpenStore() => OpenStoreRequested?.Invoke();
+        private void RequestOpenRateUs() => OpenRateUsRequested?.Invoke();
         private void RequestClose() => CloseRequested?.Invoke();
     }
 }

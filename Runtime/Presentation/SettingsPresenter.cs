@@ -76,8 +76,7 @@ namespace Dreamy.Settings
             view.SetPlatformActionsInteractable(false);
             try
             {
-                SettingsOperationResult result = await operation;
-                view.ShowOperationResult(result);
+                await operation;
                 Refresh();
             }
             finally

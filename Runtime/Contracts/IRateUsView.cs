@@ -10,7 +10,6 @@ namespace Dreamy.Settings
 
         void SetRating(int rating);
         void SetInteractable(bool interactable);
-        void ShowOperationResult(SettingsOperationResult result);
         void Close();
     }
 }

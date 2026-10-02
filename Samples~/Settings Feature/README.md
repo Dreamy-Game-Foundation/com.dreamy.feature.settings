@@ -1,8 +1,8 @@
 # Settings Feature
 
-Copy this folder into the game and create a `SettingsPanel` prefab variant from `BaseFeaturePanel`.
+The included `SettingsPanel` and `RateUsPanel` prefabs are ready to use. Their launchers create the rate-us panel from the Settings panel button.
 
-Assign TMP status text, music/SFX sliders, GDPR, Restore Purchases, Open Store, and Close buttons to `SettingsPanel`. Add `SettingsController` to the same panel root.
+For a custom scene setup, assign music/SFX toggles, GDPR, Restore Purchases, Open Store, Open Rate Us, and Close buttons to `SettingsPanel`. Use `SettingsController` with a scene `RateUsPanel` reference, or use the included launchers for prefab-driven setup.
 
 Register the host platform gateway before installing Settings:
 

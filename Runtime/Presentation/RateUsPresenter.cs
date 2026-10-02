@@ -62,7 +62,6 @@ namespace Dreamy.Settings
         {
             if (rating <= 0)
             {
-                view.ShowOperationResult(SettingsOperationResult.Failed("Select a rating first"));
                 return;
             }
 
@@ -81,7 +80,6 @@ namespace Dreamy.Settings
             try
             {
                 SettingsOperationResult result = await service.RequestReviewAsync();
-                view.ShowOperationResult(result);
                 if (result.IsSuccess)
                 {
                     PositiveRatingSubmitted?.Invoke(rating);

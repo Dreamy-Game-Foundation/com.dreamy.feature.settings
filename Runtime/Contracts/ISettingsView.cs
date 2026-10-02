@@ -13,7 +13,6 @@ namespace Dreamy.Settings
 
         void Render(SettingsViewState state);
         void SetPlatformActionsInteractable(bool interactable);
-        void ShowOperationResult(SettingsOperationResult result);
         void Close();
     }
 }
