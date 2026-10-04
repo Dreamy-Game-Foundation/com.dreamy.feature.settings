@@ -6,7 +6,7 @@
   "unity": "6000.0",
   "type": "library",
   "license": "UNLICENSED",
-  "author": { "name": "Dreamy Studio" },
+  "author": { "name": "Dreamy Game Studio" },
   "dependencies": {
     "com.dreamy.core": "1.1.2",
     "com.dreamy.audio": "0.1.0",
