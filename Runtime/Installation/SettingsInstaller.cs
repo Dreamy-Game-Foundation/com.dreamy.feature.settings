@@ -12,19 +12,26 @@ namespace Dreamy.Settings
                 out ISettingsPlatformGateway resolvedGateway)
                 ? resolvedGateway
                 : null;
-            return Install(ServiceLocator.Get<IAudioService>(), platformGateway);
+            ISettingsHapticsGateway hapticsGateway = ServiceLocator.TryGet<ISettingsHapticsGateway>(
+                out ISettingsHapticsGateway resolvedHapticsGateway)
+                ? resolvedHapticsGateway
+                : null;
+            ServiceLocator.TryGet<ISettingsReviewGateway>(out ISettingsReviewGateway reviewGateway);
+            return Install(ServiceLocator.Get<IAudioService>(), platformGateway, hapticsGateway, reviewGateway);
         }
 
         public static ISettingsService Install(
             IAudioService audioService,
-            ISettingsPlatformGateway platformGateway = null)
+            ISettingsPlatformGateway platformGateway = null,
+            ISettingsHapticsGateway hapticsGateway = null,
+            ISettingsReviewGateway reviewGateway = null)
         {
             if (audioService == null)
             {
                 throw new ArgumentNullException(nameof(audioService));
             }
 
-            SettingsModel service = new(audioService, platformGateway);
+            SettingsModel service = new(audioService, platformGateway, hapticsGateway, reviewGateway);
             ServiceLocator.Register<ISettingsService>(service);
             return service;
         }

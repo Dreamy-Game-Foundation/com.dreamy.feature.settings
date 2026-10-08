@@ -4,7 +4,8 @@
   "references": [
     "Dreamy.Core.Runtime",
     "Dreamy.Audio.Runtime",
-    "UniTask"
+    "UniTask",
+    "Dreamy.UI.Presentation"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],

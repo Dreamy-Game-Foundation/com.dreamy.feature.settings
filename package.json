@@ -2,23 +2,30 @@
   "name": "com.dreamy.feature.settings",
   "version": "0.2.0",
   "displayName": "Dreamy Settings",
-  "description": "Reusable MVP settings feature for audio preferences and host platform actions.",
+  "description": "Reusable MVP settings feature for audio/haptic preferences and host platform actions.",
   "unity": "6000.0",
   "type": "library",
   "license": "UNLICENSED",
-  "author": { "name": "Dreamy Studio" },
+  "author": {
+    "name": "Dreamy Studio"
+  },
   "dependencies": {
     "com.dreamy.core": "1.1.2",
     "com.dreamy.audio": "0.1.0",
+    "com.cysharp.unitask": "2.5.10",
     "com.dreamy.feature": "0.1.0",
-    "com.dreamy.ui": "0.2.0",
-    "com.cysharp.unitask": "2.5.10"
+    "com.dreamy.ui": "0.2.0"
   },
-  "keywords": ["settings", "audio", "mvp", "dreamy"],
+  "keywords": [
+    "settings",
+    "audio",
+    "mvp",
+    "dreamy"
+  ],
   "samples": [
     {
       "displayName": "Settings Feature",
-      "description": "Copy-ready SettingsPanel integration and simulated platform gateway.",
+      "description": "MVP Settings and Rate Us views with the shared UI presenter factory and optional host gateways.",
       "path": "Samples~/Settings Feature"
     }
   ]

@@ -6,9 +6,10 @@ namespace Dreamy.Settings
     {
         event Action<float> MusicVolumeChanged;
         event Action<float> SfxVolumeChanged;
+        event Action<bool> HapticsEnabledChanged;
         event Action GdprRequested;
         event Action RestorePurchasesRequested;
-        event Action OpenStoreRequested;
+        event Action OpenRateUsRequested;
         event Action CloseRequested;
 
         void Render(SettingsViewState state);

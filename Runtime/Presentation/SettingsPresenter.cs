@@ -1,23 +1,28 @@
 using System;
+using Dreamy.UI;
 using Cysharp.Threading.Tasks;
 
 namespace Dreamy.Settings
 {
-    public sealed class SettingsPresenter : IDisposable
+    public sealed class SettingsPresenter : IPanelPresenter
     {
         private readonly ISettingsService service;
         private readonly ISettingsView view;
+        private readonly Action openRateUs;
         private bool isBound;
+        private int generation;
 
-        public SettingsPresenter(ISettingsService service, ISettingsView view)
+        public SettingsPresenter(ISettingsService service, ISettingsView view, Action openRateUs = null)
         {
             this.service = service ?? throw new ArgumentNullException(nameof(service));
             this.view = view ?? throw new ArgumentNullException(nameof(view));
+            this.openRateUs = openRateUs;
         }
 
         public void Show()
         {
             Bind();
+            view.SetPlatformActionsInteractable(true);
             Refresh();
         }
 
@@ -28,13 +33,15 @@ namespace Dreamy.Settings
                 return;
             }
 
+            isBound = false;
+            generation++;
             view.MusicVolumeChanged -= SetMusicVolume;
             view.SfxVolumeChanged -= SetSfxVolume;
+            view.HapticsEnabledChanged -= SetHapticsEnabled;
             view.GdprRequested -= ShowGdprConsent;
             view.RestorePurchasesRequested -= RestorePurchases;
-            view.OpenStoreRequested -= OpenStore;
+            view.OpenRateUsRequested -= OpenRateUs;
             view.CloseRequested -= Close;
-            isBound = false;
         }
 
         private void Bind()
@@ -44,14 +51,18 @@ namespace Dreamy.Settings
                 return;
             }
 
+            generation++;
             view.MusicVolumeChanged += SetMusicVolume;
             view.SfxVolumeChanged += SetSfxVolume;
+            view.HapticsEnabledChanged += SetHapticsEnabled;
             view.GdprRequested += ShowGdprConsent;
             view.RestorePurchasesRequested += RestorePurchases;
-            view.OpenStoreRequested += OpenStore;
+            view.OpenRateUsRequested += OpenRateUs;
             view.CloseRequested += Close;
             isBound = true;
         }
+
+        private void OpenRateUs() => openRateUs?.Invoke();
 
         private void Refresh() => view.Render(service.GetState());
 
@@ -67,21 +78,28 @@ namespace Dreamy.Settings
             Refresh();
         }
 
+        private void SetHapticsEnabled(bool enabled)
+        {
+            service.SetHapticsEnabled(enabled);
+            Refresh();
+        }
+
         private void ShowGdprConsent() => RunOperation(service.ShowGdprConsentAsync()).Forget();
         private void RestorePurchases() => RunOperation(service.RestorePurchasesAsync()).Forget();
-        private void OpenStore() => RunOperation(service.OpenStoreAsync()).Forget();
 
         private async UniTaskVoid RunOperation(UniTask<SettingsOperationResult> operation)
         {
+            int operationGeneration = generation;
             view.SetPlatformActionsInteractable(false);
             try
             {
                 await operation;
-                Refresh();
+                if (isBound && generation == operationGeneration) Refresh();
             }
             finally
             {
-                view.SetPlatformActionsInteractable(true);
+                if (isBound && generation == operationGeneration)
+                    view.SetPlatformActionsInteractable(true);
             }
         }
 

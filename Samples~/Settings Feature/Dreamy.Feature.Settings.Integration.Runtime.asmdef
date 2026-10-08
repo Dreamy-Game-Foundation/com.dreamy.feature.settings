@@ -8,7 +8,9 @@
     "Dreamy.UI.Runtime",
     "Unity.TextMeshPro",
     "UnityEngine.UI",
-    "UniTask"
+    "UniTask",
+    "Dreamy.Audio.Runtime",
+    "Dreamy.UI.Presentation"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],

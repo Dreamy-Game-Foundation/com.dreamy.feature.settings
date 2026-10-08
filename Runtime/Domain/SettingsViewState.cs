@@ -7,15 +7,30 @@ namespace Dreamy.Settings
             float sfxVolume,
             bool canShowGdprConsent,
             bool canRestorePurchases,
-            bool canOpenStore)
+            bool canOpenStore,
+            bool hapticsEnabled = false,
+            bool canSetHaptics = false,
+            bool canRequestReview = false,
+            bool hasPositiveRating = false,
+            bool hasClaimedReviewReward = false)
         {
             MusicVolume = musicVolume;
             SfxVolume = sfxVolume;
             CanShowGdprConsent = canShowGdprConsent;
             CanRestorePurchases = canRestorePurchases;
             CanOpenStore = canOpenStore;
+            HapticsEnabled = hapticsEnabled;
+            CanSetHaptics = canSetHaptics;
+            CanRequestReview = canRequestReview;
+            HasPositiveRating = hasPositiveRating;
+            HasClaimedReviewReward = hasClaimedReviewReward;
         }
 
+        public bool CanRequestReview { get; }
+        public bool HasPositiveRating { get; }
+        public bool HasClaimedReviewReward { get; }
+        public bool HapticsEnabled { get; }
+        public bool CanSetHaptics { get; }
         public float MusicVolume { get; }
         public float SfxVolume { get; }
         public bool CanShowGdprConsent { get; }
