@@ -1,6 +1,6 @@
 # Dreamy Settings
 
-Runtime services and presenters for Music/SFX volume, haptic preferences, and host-owned consent, purchase restore, and Rate Us actions. Runtime has no UnityEngine/UnityEditor references. The optional Settings Feature sample provides MVP views, presenter factories, and simulated host adapters. It contains no per-feature demo, launcher, or controller classes.
+Runtime services and presenters for Music/SFX volume, haptic preferences, and host-owned consent, purchase restore, and Rate Us actions. Runtime has no UnityEngine/UnityEditor references. The optional Settings Feature sample provides MVP views, presenter factories, and explicit host adapters. It contains no per-feature demo, launcher, or controller classes.
 
 ## Installation
 
@@ -71,3 +71,16 @@ python3 LocalPackages/com.dreamy.feature.settings/Tests~/validate-settings.py
 ```
 
 The harness checks that views have no presenter/service/navigation construction, validates prefab references, compiles runtime/sample code against the project's assemblies, and verifies factory/host show/hide/reopen/disposal plus haptic/review behavior. Native store launch and host save/reward adapters require separate Unity/device validation.
+
+## Cài package
+
+Dùng Unity 6000.0 trở lên. Sandbox đã tham chiếu package bằng `file:../LocalPackages/com.dreamy.feature.settings`. Project khác dùng Package Manager > + > Install package from disk và chọn package.json, hoặc Git URL của repository nội bộ. Cài cả dependency Dreamy/Git vào manifest của game; version dependency không tự cấu hình registry riêng.
+
+Dependency trực tiếp theo package.json:
+
+- `com.dreamy.core` (1.1.2)
+- `com.dreamy.audio` (0.1.0)
+- `com.dreamy.feature` (0.1.0)
+- `com.dreamy.ui` (0.2.0)
+- `com.cysharp.unitask` (2.5.10)
+
