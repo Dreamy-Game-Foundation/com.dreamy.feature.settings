@@ -159,12 +159,15 @@ with tempfile.TemporaryDirectory(prefix='dreamy-settings-') as temp:
         feature_sample = feature / 'Samples~' / folder
         definition_path = next(feature_sample.glob('*.asmdef'))
         sample_def = __import__('json').loads(definition_path.read_text())
-        sample_project, sample_dll = create_project(sample_def['name'], feature_sample.glob('*.cs'),
+        imported_feature = root / 'Assets/Samples' / display / version / folder
+        sample_sources = list(feature_sample.glob('*.cs'))
+        if imported_feature.exists():
+            sample_sources.extend(p for p in imported_feature.glob('*.cs') if not (feature_sample / p.name).exists())
+        sample_project, sample_dll = create_project(sample_def['name'], sample_sources,
             {sample_def['name'], 'Dreamy.UI.Presentation'}, overrides, reference_names=set(sample_def['references']),
             precompiled_names=set(sample_def.get('precompiledReferences', [])) if sample_def.get('overrideReferences') else None)
         subprocess.run(['dotnet', 'build', str(sample_project), '--verbosity', 'quiet'], check=True)
         overrides[sample_def['name']] = sample_dll
-        imported_feature = root / 'Assets/Samples' / display / version / folder
         if imported_feature.exists():
             for source in feature_sample.glob('*.cs'):
                 assert source.read_bytes() == (imported_feature / source.name).read_bytes(), source
@@ -194,6 +197,19 @@ with tempfile.TemporaryDirectory(prefix='dreamy-settings-') as temp:
         integration_harness_project, _ = create_project('FeatureIntegrationHarness', feature_tests,
             {'Dreamy.UI.Presentation'}, dict(overrides, **{'nunit.framework': root / nunit}), executable=True)
         subprocess.run(['dotnet', 'run', '--project', str(integration_harness_project), '--verbosity', 'quiet'], check=True)
+    # Additional integrations brought in by the template's main branch.
+    for directory in [root / 'LocalPackages/com.dreamy.feedback/Runtime',
+                      root / 'Assets/Samples/Dreamy Feedback/0.2.0/Basic Feedback',
+                      root / 'Assets/Samples/Dreamy Feedback/0.2.0/Feedback Economy',
+                      root / 'Assets/Samples/Dreamy Economy Contracts/0.2.0/Wallet Demo']:
+        if not directory.exists(): continue
+        definition = __import__('json').loads(next(directory.glob('*.asmdef')).read_text())
+        sources = directory.rglob('*.cs') if directory.name == 'Runtime' else directory.glob('*.cs')
+        extra_project, extra_dll = create_project(definition['name'], sources,
+            {definition['name'], 'Dreamy.UI.Presentation'}, overrides,
+            reference_names=set(definition['references']))
+        subprocess.run(['dotnet', 'build', str(extra_project), '--verbosity', 'quiet'], check=True)
+        overrides[definition['name']] = extra_dll
     template_project, _ = create_project('Dreamy.Template.Runtime',
         (root / 'Assets/_Project/Scripts').rglob('*.cs'), {'Dreamy.UI.Presentation'}, overrides)
     subprocess.run(['dotnet', 'build', str(template_project), '--verbosity', 'quiet'], check=True)
