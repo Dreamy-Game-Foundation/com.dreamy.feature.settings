@@ -10,7 +10,6 @@
     "Unity.TextMeshPro",
     "UnityEngine.UI",
     "UniTask",
-    "Dreamy.Audio.Runtime",
     "Dreamy.UI.Presentation"
   ],
   "includePlatforms": [],
