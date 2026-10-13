@@ -1,6 +1,6 @@
 {
   "name": "com.dreamy.feature.settings",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "displayName": "Dreamy Settings",
   "description": "Reusable MVP settings feature for audio/haptic preferences and host platform actions.",
   "unity": "6000.0",

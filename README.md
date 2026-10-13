@@ -56,7 +56,7 @@ Open from any caller through `PanelManager.Show<SettingsPanel>(address)` or `Tra
 
 Gateway choices are explicit; the installer never creates mock providers:
 
-- SettingsPlatformGateway opens a real HTTP(S) store listing with Application.OpenURL. Pass the store URL (required for iOS; Android can derive it from Application.identifier). Optional consent/restore callbacks call the host SDK. Missing callbacks disable those actions. Launch success is a request to open the URL, not confirmation of a published review.
+- SettingsPlatformGateway is a placeholder for future DreamySDK integration. All capabilities return false and operations return Unavailable until SDK logic is added. It performs no store launch, consent, purchase restoration, or review request.
 - PlayerPrefsSettingsHapticsGateway persists the device-local preference and calls an injected real haptic provider. Without an installed haptic gateway, the toggle is unavailable. The constructor applies the saved preference to the provider.
 - PlayerPrefsSettingsReviewGateway stores device-local positive rating/request and optional reward claim. Account-scoped games should supply their Datasave/backend implementation. Existing Dreamy.Settings.Sample preference keys are preserved for compatibility.
 
